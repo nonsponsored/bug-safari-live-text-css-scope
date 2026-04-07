@@ -2,6 +2,9 @@
 
 This repository demonstrates a Safari-specific rendering bug where **Live Text interaction overrides scoped CSS styles** applied via `@scope` on an `<img>` element.
 
+## Update: Impacts Safari 26.3 and lower, but appears to be fixed as of 26.4
+
+
 ## 🐞 Summary
 
 When Safari’s **Live Text** feature is triggered (hover or long-press on an image), it causes styles defined inside an `@scope` rule to be ignored. The browser falls back to unscoped styles, breaking layout.
