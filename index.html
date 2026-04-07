@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug: Safari Live Text breaks @scope styles on img (height + object-fit)</title>
+    <style>
+        body {
+        color: #454545;
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+        max-width: 768px;
+        padding: 2rem;
+      }
+      h1 { 
+        font-size: 1.2rem;
+        margin-block-end: 0.25rem; 
+      }
+      p  {
+        margin: 0.5rem 0 1.5rem;
+      }
+      figure {
+        margin-inline: 0;
+      }
+      figure:not(:first-of-type) {
+        margin-top: 2rem;
+      }
+      figcaption {
+        margin-top: 0.5rem;
+      } 
+
+      /* Base img */
+      img {
+        display: block;
+        height: auto;
+        max-width: 100%;
+      }
+
+      /* Scoped img */
+      @scope (.scope) {
+        img {
+          height: 100%;
+          object-fit: cover;
+          width: 100%;
+        }
+      }
+
+      /* No Scoped img */
+      .no-scope img {
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+      }   
+    </style>
+  </head>
+  <body>
+
+    <h1>Bug: Live Text activation breaks <code>@scope</code> styles on <code>img</code></h1>
+
+    <p>
+      <strong>To reproduce:</strong> Open this page in Safari with Live Text enabled (Settings → General → Language &amp; Region → Live Text), which is the default setting. Long-press or hover over the first image below to trigger Live Text. The image will snap from <code>object-fit: cover</code> / <code>height: 100%</code> to <code>height: auto</code>, breaking the layout. The 2nd image uses identical rules but without <code>@scope</code> — it works.
+    </p>
+
+    <p>
+      <strong>Expected:</strong> Live Text overlay injection should not affect <code>@scope</code> styles on the <code>img</code> element.
+    </p>
+
+    <p>
+      <strong>Actual:</strong> When Live Text activates, the <code>@scope</code> image loses <code>height: 100%</code> and <code>object-fit: cover</code> are lost and the unscoped <code>img</code> rule (<code>height: auto</code>) renders.
+    </p>
+
+    <figure class="scope">
+      <img
+        src="text-in-image.webp"
+        alt=""
+        width="600"
+        height="400"
+      >
+      <figcaption>❌ <strong>Broken:</strong> <code>img</code> styled inside <code>@scope</code></figcaption>
+    </figure>
+    
+  
+    <figure class="no-scope">
+      <img
+        src="text-in-image.webp"
+        alt=""
+        width="600"
+        height="400"
+      >
+      <figcaption>✅ <strong>Works:</strong> same declarations without @scope</figcaption>
+    </figure>
+  </body>
+</html>
